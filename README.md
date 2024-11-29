@@ -6,7 +6,7 @@ This bot is here to help you identify packaging types and make waste disposal si
 
 Using the bot is easy:
 1. Snap a photo of a product’s barcode.
-2. Send it to the bot.
+2. Send it to the [bot](https://t.me/eco_assist_bot).
 
 The bot will analyze the packaging type and provide tailored guidance on how to dispose of it responsibly.
 
