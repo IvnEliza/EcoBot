@@ -47,12 +47,20 @@ def add_caps(call):
     message_id = int(caps_factory.parse(callback_data=call.data)['message_id'])
 
     # remove buttons to avoid re-crediting
-    bot.edit_message_text(
-        chat_id=chat_id,
-        message_id=call.message.message_id, 
-        text=get_message_from_db(message_id),
-        parse_mode='MarkdownV2'
-    )
+    message_from_db = get_message_from_db(message_id)
+    if message_from_db:
+        bot.edit_message_text(
+            chat_id=chat_id,
+            message_id=call.message.message_id, 
+            text=message_from_db,
+            parse_mode='MarkdownV2'
+        )
+    else:
+        bot.edit_message_text(
+            chat_id=chat_id,
+            message_id=call.message.message_id, 
+            text=call.message.text
+        )
 
     # add user's caps in database
     add_caps_to_db(chat_id, caps)

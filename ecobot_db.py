@@ -166,12 +166,15 @@ def save_message_to_db(message_text):
         FROM messages
         WHERE message_text = ?
     """, (message_text,))
-    message_id = int(cursor.fetchone()[0])
+
+    # save the result
+    result = cursor.fetchone()
 
     # close connection to the database
     conn.close()
 
-    return message_id
+    if result:
+        return int(result[0])
 
 
 def get_message_from_db(message_id):
@@ -198,18 +201,26 @@ def get_message_from_db(message_id):
         FROM messages
         WHERE message_id = ?
     """, (message_id,))
-    message_text = cursor.fetchone()[1]
 
-    # delete temporarily stored message text
-    cursor.execute("""
-        DELETE FROM messages
-        WHERE message_id = ?
-    """, (message_id,))
+    # save the result
+    result = cursor.fetchone()
 
-    # commit changes
-    conn.commit()
+    if result:
+        message_text = result[1]
 
+        # delete temporarily stored message text
+        cursor.execute("""
+            DELETE FROM messages
+            WHERE message_id = ?
+        """, (message_id,))
+
+        # commit changes
+        conn.commit()
+
+        # close connection to the database
+        conn.close()
+
+        return message_text
+    
     # close connection to the database
     conn.close()
-
-    return message_text

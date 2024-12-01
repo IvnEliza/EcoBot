@@ -220,7 +220,7 @@ def print_recommendations(materials, product_name, barcode, bot, message, caps_f
             # message with recommendation
             message_text = escaping_for_markdown(
                 f'\U0001F3AB*Barcode*: `{barcode}`\n' +
-                f'\U0001F4DD*Product name*: {product_name.replace('*', '').replace('`', '') if product_name else "Not found"}\U0001F5FF\n\n' +
+                f'\U0001F4DD*Product name*: {product_name.replace("*", "").replace("`", "") if product_name else "Not found"}\U0001F5FF\n\n' +
                 f'It seems that the package of this product contains *{m}*.' +
                 '\U0000267BTo ensure proper recycling and reduce waste, follow these simple guidelines:\n\n' +
                 f'{file.read()}\n\n' +
@@ -245,19 +245,26 @@ def print_recommendations(materials, product_name, barcode, bot, message, caps_f
             keyboard.add(caps_button)
 
             # send recommendations
-            bot.reply_to(
-                message, 
-                message_text, 
-                parse_mode='MarkdownV2',
-                reply_markup=keyboard
-            )                
+            if message_id is not None:
+                bot.reply_to(
+                    message,
+                    message_text,
+                    parse_mode='MarkdownV2',
+                    reply_markup=keyboard
+                )
+            else:
+                bot.reply_to(
+                    message,
+                    message_text,
+                    parse_mode='MarkdownV2'
+                )
     else:
         # send a message about insufficient information in Open Food Facts database
         bot.reply_to(
             message,
             escaping_for_markdown(
                 f'\U0001F3AB*Barcode*: `{barcode}`\n' +
-                f'\U0001F4DD*Product name*: {product_name.replace('*', '').replace('`', '') if product_name else "Not found"}\U0001F5FF\n\n' +
+                f'\U0001F4DD*Product name*: {product_name.replace("*", "").replace("`", "") if product_name else "Not found"}\U0001F5FF\n\n' +
                 '\U0001F614Unfortunately, we have not found sufficient information on the product\'s packaging type.\n\n' +
                 'We use the Open Food Facts database,' +
                 ' so you can help us and this independent non-profit project by filling in the product information in the app,'
